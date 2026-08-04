@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const { query } = require('../db');
 const { adminRequired } = require('../middlewares/auth');
 const { rowToDict, rowsToDict, isUniqueViolation } = require('../utils/helpers');
@@ -147,6 +148,51 @@ router.post('/admin/agendamentos', adminRequired, async (req, res) => {
       }
       throw err;
     }
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── Clientes (contas de login do site) ─────────────
+router.get('/admin/clientes', adminRequired, async (req, res) => {
+  try {
+    const busca = req.query.busca || '';
+    let sql = 'SELECT id, nome, telefone, created_at FROM clientes';
+    const params = [];
+
+    if (busca) {
+      sql += ' WHERE nome ILIKE $1 OR telefone ILIKE $1';
+      params.push(`%${busca}%`);
+    }
+    sql += ' ORDER BY nome';
+
+    const result = await query(sql, params);
+    return res.json(rowsToDict(result.rows));
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+router.put('/admin/clientes/:cid/senha', adminRequired, async (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const { senha } = req.body;
+
+    if (!senha || String(senha).length < 4) {
+      return res.status(400).json({ error: 'A nova senha deve ter pelo menos 4 caracteres' });
+    }
+
+    const senhaHash = await bcrypt.hash(senha, 10);
+    const result = await query(
+      'UPDATE clientes SET senha_hash = $1 WHERE id = $2 RETURNING id, nome, telefone',
+      [senhaHash, cid]
+    );
+
+    if (!result.rows[0]) {
+      return res.status(404).json({ error: 'Cliente não encontrado' });
+    }
+
+    return res.json({ ok: true, cliente: rowToDict(result.rows[0]) });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

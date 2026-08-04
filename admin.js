@@ -66,7 +66,7 @@ function switchTab(tab) {
     .querySelectorAll(".admin-view")
     .forEach((v) => (v.style.display = "none"));
 
-  const map = { agenda: 1, horarios: 2, "config-geral": 3, servicos: 4 };
+  const map = { agenda: 1, horarios: 2, "config-geral": 3, servicos: 4, clientes: 5 };
   document
     .querySelector(`.nav-item:nth-child(${map[tab]})`)
     ?.classList.add("active");
@@ -75,6 +75,7 @@ function switchTab(tab) {
   if (tab === "agenda") renderizarAgenda();
   if (tab === "config-geral") renderizarConfigSemanal();
   if (tab === "servicos") { renderizarServicosAdmin(); renderizarBarbeirosAdmin(); }
+  if (tab === "clientes") renderizarClientesAdmin();
 }
 
 async function carregarConfig() {
@@ -603,5 +604,74 @@ async function removerServico(id) {
     renderizarServicosAdmin();
   } catch (e) {
     alert(e.message || "Erro ao remover serviço.");
+  }
+}
+
+// ─── CLIENTES (login do site) ──────────────────────
+async function renderizarClientesAdmin() {
+  const container = document.getElementById("lista-clientes-admin");
+  const busca = document.getElementById("busca-clientes").value.trim();
+  container.innerHTML = "<p>Carregando...</p>";
+  try {
+    const qs = busca ? `?busca=${encodeURIComponent(busca)}` : "";
+    const clientes = await apiFetch(`/admin/clientes${qs}`, {
+      token: getAdminToken(),
+    });
+
+    if (!clientes.length) {
+      container.innerHTML = "<p>Nenhum cliente encontrado.</p>";
+      return;
+    }
+
+    container.innerHTML = clientes
+      .map(
+        (c) => `
+      <div class="card-admin" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+        <div>
+          <strong>${escaparHTML(c.nome)}</strong>
+          <div style="font-size:12px;color:#666;">${escaparHTML(formatarTelefoneInput(c.telefone))}</div>
+        </div>
+        <button class="btn-acao btn-mini" style="width:auto;" onclick="abrirModalSenha(${c.id}, '${escaparHTML(c.nome)}', '${escaparHTML(formatarTelefoneInput(c.telefone))}')">
+          <i class="fa-solid fa-key"></i> Redefinir senha
+        </button>
+      </div>
+    `,
+      )
+      .join("");
+  } catch (e) {
+    container.innerHTML = "<p>Erro ao carregar clientes.</p>";
+  }
+}
+
+function abrirModalSenha(id, nome, telefone) {
+  document.getElementById("senha-cliente-id").value = id;
+  document.getElementById("senha-cliente-info").textContent = `${nome} — ${telefone}`;
+  document.getElementById("senha-nova").value = "";
+  document.getElementById("modal-senha").style.display = "flex";
+}
+
+function fecharModalSenha() {
+  document.getElementById("modal-senha").style.display = "none";
+}
+
+async function salvarNovaSenha() {
+  const id = document.getElementById("senha-cliente-id").value;
+  const senha = document.getElementById("senha-nova").value;
+
+  if (!senha || senha.length < 4) {
+    alert("A nova senha deve ter pelo menos 4 caracteres.");
+    return;
+  }
+
+  try {
+    await apiFetch(`/admin/clientes/${id}/senha`, {
+      method: "PUT",
+      token: getAdminToken(),
+      body: JSON.stringify({ senha }),
+    });
+    fecharModalSenha();
+    alert("Senha redefinida com sucesso! Repasse a nova senha ao cliente.");
+  } catch (e) {
+    alert(e.message || "Erro ao redefinir senha.");
   }
 }
