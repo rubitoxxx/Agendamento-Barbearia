@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barbearia — Agendamento</title>
+
+  <link rel="icon" type="image/x-icon" href="icone.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="Logo da Barbearia" class="logo-img">
+  
+      <div>
+          <h1>BarberShop</h1>
+          <p>Agende seu horário com facilidade</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/mago_dos_cortes_1992?igsh=MTdycm9yZWl1dDVkOQ==" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://maps.app.goo.gl/m1CCy69B2W6qie2d7" target="_blank" rel="noopener" title="Como chegar"><i class="fa-solid fa-location-dot"></i></a>
+          </div>
+      </div>
+      <nav>
+        <button class="nav-btn active" onclick="showSection('agendar')">Agendar</button>
+        <button class="nav-btn" onclick="showSection('agendamentos')">Meus Agendamentos</button>
+        <button class="nav-btn" id="btn-auth-nav" onclick="showSection('auth')">Entrar</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- TOAST DE SUCESSO -->
+  <div id="toast-sucesso" class="toast-sucesso" style="display:none;">
+    <span>✅</span>
+    <p id="toast-msg">Agendamento enviado! Aguarde a confirmação da barbearia.</p>
+  </div>
+
+  <main>
+    <!-- SEÇÃO: LOGIN / CADASTRO -->
+    <section id="section-auth" class="section">
+      <div class="card auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
+          <button class="auth-tab" id="tab-registrar" onclick="switchAuthTab('registrar')">Cadastrar</button>
+        </div>
+
+        <!-- Login -->
+        <div id="form-login-wrap">
+          <h2 class="card-title">Entrar na sua conta</h2>
+          <div class="form-group">
+            <label for="login-telefone">Telefone</label>
+            <input type="tel" id="login-telefone" placeholder="(11) 99999-9999" maxlength="15" />
+            <span class="error-msg" id="erro-login-tel"></span>
+          </div>
+          <div class="form-group">
+            <label for="login-senha">Senha</label>
+            <input type="password" id="login-senha" placeholder="Sua senha" />
+            <span class="error-msg" id="erro-login-senha"></span>
+          </div>
+          <button class="btn-agendar" onclick="fazerLoginCliente()">Entrar</button>
+        </div>
+
+        <!-- Cadastro -->
+        <div id="form-registrar-wrap" style="display:none;">
+          <h2 class="card-title">Criar conta</h2>
+          <div class="form-group">
+            <label for="reg-nome">Nome completo</label>
+            <input type="text" id="reg-nome" placeholder="Ex: João Silva" />
+            <span class="error-msg" id="erro-reg-nome"></span>
+          </div>
+          <div class="form-group">
+            <label for="reg-telefone">Telefone (WhatsApp)</label>
+            <input type="tel" id="reg-telefone" placeholder="(11) 99999-9999" maxlength="15" />
+            <span class="error-msg" id="erro-reg-tel"></span>
+          </div>
+          <div class="form-group">
+            <label for="reg-senha">Senha</label>
+            <input type="password" id="reg-senha" placeholder="Mínimo 4 caracteres" />
+            <span class="error-msg" id="erro-reg-senha"></span>
+          </div>
+          <button class="btn-agendar" onclick="fazerRegistroCliente()">Cadastrar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: FORMULÁRIO DE AGENDAMENTO -->
+    <section id="section-agendar" class="section active">
+      <div class="card">
+        <h2 class="card-title">Novo Agendamento</h2>
+        <p id="aviso-login" class="aviso-login" style="display:none;">
+          Faça <a href="#" onclick="showSection('auth'); return false;">login</a> para agendar.
+        </p>
+
+        <form id="form-agendamento" novalidate>
+
+          <div class="form-group">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" placeholder="Ex: João Silva" autocomplete="off" />
+            <span class="error-msg" id="erro-nome"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="telefone">Telefone (WhatsApp)</label>
+            <input type="tel" id="telefone" placeholder="(11) 99999-9999" maxlength="15" autocomplete="off" readonly />
+            <span class="error-msg" id="erro-telefone"></span>
+          </div>
+
+          <div class="form-group">
+            <label>Serviço</label>
+            <div class="servicos-grid" id="servicos-grid"></div>
+            <span class="error-msg" id="erro-servico"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="barbeiro">Barbeiro</label>
+            <select id="barbeiro">
+              <option value="">Selecione um barbeiro</option>
+              <option value="Carlos">Carlos</option>
+              <option value="Rafael">Rafael</option>
+              <option value="Diego">Diego</option>
+              <option value="Qualquer">Sem preferência</option>
+            </select>
+            <span class="error-msg" id="erro-barbeiro"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="data">Data</label>
+            <input type="date" id="data" />
+            <span class="error-msg" id="erro-data"></span>
+          </div>
+
+          <div class="form-group" id="grupo-horarios" style="display:none;">
+            <label>Horário disponível</label>
+            <div class="legenda-horarios">
+              <span class="legenda-item"><span class="dot livre"></span> Livre</span>
+              <span class="legenda-item"><span class="dot ocupado"></span> Ocupado</span>
+              <span class="legenda-item"><span class="dot passado"></span> Passou</span>
+            </div>
+            <div class="horarios-grid" id="horarios-grid"></div>
+            <span class="error-msg" id="erro-horario"></span>
+          </div>
+
+          <button type="submit" class="btn-agendar" id="btn-submit-agendar">Confirmar Agendamento</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: LISTA DE AGENDAMENTOS -->
+    <section id="section-agendamentos" class="section">
+      <div class="card">
+        <div class="agendamentos-header">
+          <h2 class="card-title">Meus Agendamentos</h2>
+        </div>
+        <div id="lista-agendamentos">
+          <div class="empty-state">
+            <span>📅</span>
+            <p>Nenhum agendamento ainda.<br>Faça seu primeiro agendamento!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

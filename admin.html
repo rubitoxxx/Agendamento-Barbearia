@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mago dos Cortes — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="icone.ico" />
+  <link rel="stylesheet" href="admin-style.css" />
+</head>
+<body>
+
+  <div id="root">
+    <div class="app-container">
+      
+      <div class="header-app">
+        <div class="logo-text">ADMINISTRAÇÃO</div>
+        <div class="sub-text">MAGO DOS CORTES</div>
+        <button class="btn-logout" onclick="logout()" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+
+      <div class="conteudo-centralizado">
+        
+        <!-- AGENDA -->
+        <div id="view-agenda" class="admin-view">
+          <h2 class="titulo-secao">Agenda</h2>
+          
+          <div class="form-group">
+            <input type="date" id="filtro-data" onchange="renderizarAgenda()">
+          </div>
+          <div class="form-group">
+            <input type="search" id="busca-agenda" placeholder="Buscar por nome ou telefone..." oninput="renderizarAgenda()">
+          </div>
+
+          <div id="lista-agenda"></div>
+          <button class="btn-acao btn-info" onclick="abrirModalEncaixe()">+ Adicionar Encaixe</button>
+        </div>
+
+        <!-- HORÁRIOS -->
+        <div id="view-horarios" class="admin-view" style="display:none;">
+          <h2 class="titulo-secao">Configurar Horários</h2>
+          <div class="card-admin">
+            <div class="form-group">
+              <label>Selecione o Dia</label>
+              <input type="date" id="data-config" onchange="carregarConfigHorarios()">
+            </div>
+            <div id="config-horarios-container" style="display:none;">
+              <label>Horários para este dia</label>
+              <div class="horarios-grid" id="grid-admin-horarios"></div>
+              <div class="form-group" style="margin-top: 20px;">
+                <label><input type="checkbox" id="bloquear-dia"> Bloquear dia inteiro</label>
+              </div>
+              <button class="btn-acao" onclick="salvarConfigHorarios()">Salvar Configuração</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONFIG SEMANAL -->
+        <div id="view-config-geral" class="admin-view" style="display:none;">
+          <h2 class="titulo-secao">Configuração Semanal</h2>
+          <div class="card-admin">
+            <p style="font-size: 12px; margin-bottom: 15px; color: #666;">Marque os dias da semana que a barbearia abre e os horários padrão.</p>
+            <div id="config-semanal-dias"></div>
+            <button class="btn-acao" style="margin-top: 20px;" onclick="salvarConfigSemanal()">Salvar Configuração Semanal</button>
+          </div>
+        </div>
+
+        <!-- SERVIÇOS -->
+        <div id="view-servicos" class="admin-view" style="display:none;">
+          <h2 class="titulo-secao">Preços e Serviços</h2>
+          <div class="card-admin" style="margin-bottom:16px;">
+            <div class="form-group"><label>Nome do serviço</label><input type="text" id="novo-servico-nome" placeholder="Ex: Corte de Cabelo"></div>
+            <div class="form-group"><label>Preço</label><input type="text" id="novo-servico-preco" placeholder="Ex: R$ 35"></div>
+            <div class="form-group"><label>Duração</label><input type="text" id="novo-servico-duracao" placeholder="Ex: 30 min"></div>
+            <button class="btn-acao" onclick="adicionarServico()">+ Adicionar Serviço</button>
+          </div>
+          <div id="lista-servicos-admin"></div>
+
+          <h2 class="titulo-secao" style="margin-top:24px;">Barbeiros</h2>
+          <div class="card-admin" style="margin-bottom:16px;">
+            <div class="form-group"><label>Nome do barbeiro</label><input type="text" id="novo-barbeiro-nome" placeholder="Ex: João"></div>
+            <button class="btn-acao" onclick="adicionarBarbeiro()">+ Adicionar Barbeiro</button>
+          </div>
+          <div id="lista-barbeiros-admin"></div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('agenda')"><i class="fa-solid fa-list-check"></i></div>
+        <div class="nav-item" onclick="switchTab('horarios')"><i class="fa-solid fa-clock"></i></div>
+        <div class="nav-item" onclick="switchTab('config-geral')"><i class="fa-solid fa-gear"></i></div>
+        <div class="nav-item" onclick="switchTab('servicos')"><i class="fa-solid fa-tags"></i></div>
+        <div class="nav-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-eye"></i></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL ENCAIXE -->
+  <div id="modal-encaixe" class="modal-overlay" style="display:none;">
+    <div class="modal-container">
+      <h3 class="titulo-secao">Novo Encaixe</h3>
+      <div class="form-group"><input type="text" id="enc-nome" placeholder="Nome do cliente"></div>
+      <div class="form-group"><input type="tel" id="enc-tel" placeholder="Telefone"></div>
+      <div class="form-group"><input type="date" id="enc-data"></div>
+      <div class="form-group"><input type="time" id="enc-hora"></div>
+      <button class="btn-acao" onclick="salvarEncaixe()">Salvar</button>
+      <button class="btn-acao btn-danger" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR -->
+  <div id="modal-editar" class="modal-overlay" style="display:none;">
+    <div class="modal-container">
+      <h3 class="titulo-secao">Editar Agendamento</h3>
+      <input type="hidden" id="edit-id">
+      <div class="form-group"><input type="text" id="edit-nome" placeholder="Nome"></div>
+      <div class="form-group"><input type="tel" id="edit-tel" placeholder="Telefone"></div>
+      <div class="form-group"><input type="date" id="edit-data"></div>
+      <div class="form-group"><input type="time" id="edit-hora"></div>
+      <div class="form-group"><input type="text" id="edit-servico" placeholder="Serviço"></div>
+      <button class="btn-acao" onclick="salvarEdicao()">Salvar</button>
+      <button class="btn-acao btn-danger" onclick="fecharModalEditar()">Cancelar</button>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

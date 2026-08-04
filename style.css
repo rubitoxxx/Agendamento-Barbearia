@@ -1,0 +1,896 @@
+/* ===========================
+   RESET & BASE
+=========================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --gold: #c9a84c;
+  --gold-dark: #a8893c;
+  --gold-glow: rgba(201, 168, 76, 0.18);
+  --text: #f0f0f0;
+  --text-muted: #9a9a9a;
+  --text-faint: #555555;
+  --border-muted: #666666;
+  --danger: #e05252;
+  --success: #4caf7d;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --ease-fast: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  min-height: 100vh;
+
+  background: url("fundo.png") center center no-repeat fixed;
+  background-size: cover;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+}
+
+.header-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.logo h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.logo p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.social-links {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+}
+.social-links a {
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  transition: color 0.18s var(--ease-fast), transform 0.18s var(--ease-fast);
+}
+.social-links a:hover {
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.nav-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+  font-weight: 700;
+}
+
+/* ===========================
+   MAIN / SECTIONS
+=========================== */
+main {
+  max-width: 780px;
+  margin: 32px auto;
+  padding: 0 20px 60px;
+}
+
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
+
+/* ===========================
+   CARD
+=========================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===========================
+   FORM
+=========================== */
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+input[type="password"],
+select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239a9a9a'><path d='M5.5 7.5l4.5 4.5 4.5-4.5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+
+input.invalid,
+select.invalid {
+  border-color: var(--danger);
+}
+
+.error-msg {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--danger);
+  margin-top: 5px;
+  min-height: 16px;
+}
+
+/* ===========================
+   SERVIÇOS GRID
+=========================== */
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.servico-card {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.servico-card:hover {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+}
+
+.servico-card.selected {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.servico-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.servico-nome {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.servico-info {
+  font-size: 0.76rem;
+  color: var(--gold);
+}
+
+/* ===========================
+   HORÁRIOS GRID
+=========================== */
+.horarios-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.horario-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px 16px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.horario-btn.livre {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.horario-btn.ocupado {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.horario-btn.passado {
+  opacity: 0.25;
+  cursor: not-allowed;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.horario-btn.bloqueado {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--border-muted);
+  color: var(--border-muted);
+}
+
+.horario-btn:hover:not(.ocupado):not(.passado):not(.bloqueado) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.horario-btn.selected {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+  font-weight: 700;
+}
+
+.legenda-horarios {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.legenda-item .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legenda-item .dot.livre {
+  background: var(--success);
+}
+.legenda-item .dot.ocupado {
+  background: var(--danger);
+}
+.legenda-item .dot.passado {
+  background: var(--text-faint);
+}
+
+.loading-horarios,
+.sem-horarios {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 12px;
+}
+
+.btn-whatsapp {
+  background: #25d366 !important;
+  color: #fff !important;
+  margin-bottom: 10px;
+}
+
+.tag-status.concluido {
+  display: inline-block;
+  background: var(--success);
+  color: #000;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.tag-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+.tag-status.status-pendente {
+  background: #f0a030;
+  color: #000;
+}
+
+.tag-status.status-confirmado {
+  background: var(--gold-glow);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+
+.tag-status.status-cancelado {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Auth */
+.auth-card { max-width: 480px; margin: 0 auto; }
+.auth-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.auth-tab {
+  flex: 1;
+  padding: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-weight: 600;
+}
+.auth-tab.active {
+  background: var(--gold-glow);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.aviso-login {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: var(--surface2);
+  border-radius: 8px;
+}
+.aviso-login a { color: var(--gold); }
+
+/* Toast */
+.toast-sucesso {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--success);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  max-width: 90%;
+}
+.toast-sucesso p { color: var(--text); font-size: 0.95rem; margin: 0; }
+
+.agendamento-item.status-item-pendente {
+  border-left: 3px solid #f0a030;
+}
+
+/* ===========================
+   BOTÃO PRINCIPAL
+=========================== */
+.btn-agendar {
+  width: 100%;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+
+.btn-agendar:hover {
+  background: var(--gold-dark);
+}
+
+.btn-agendar:active {
+  transform: scale(0.98);
+}
+
+/* ===========================
+   LISTA DE AGENDAMENTOS
+=========================== */
+.agendamentos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.agendamentos-header .card-title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.btn-limpar {
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-limpar:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.agendamento-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.agendamento-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.agendamento-info p {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.agendamento-info .tag-servico {
+  display: inline-block;
+  background: var(--gold-glow);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-top: 6px;
+}
+
+.agendamento-data {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.agendamento-data .data-hora {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.agendamento-data .data-dia {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.btn-cancelar {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.btn-cancelar:hover {
+  color: var(--danger);
+}
+
+/* ===========================
+   EMPTY STATE
+=========================== */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* ===========================
+   MODAL
+=========================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.modal h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--success);
+  margin-bottom: 20px;
+}
+
+.modal-detalhes {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.modal-detalhes p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.modal-detalhes p strong {
+  color: var(--text);
+}
+
+/* ===========================
+   RESPONSIVO
+=========================== */
+@media (max-width: 520px) {
+  .card {
+    padding: 22px 16px;
+  }
+  .header-inner {
+    padding: 12px 16px;
+  }
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+  .nav-btn {
+    padding: 7px 12px;
+    font-size: 0.82rem;
+  }
+  .servicos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .agendamento-item {
+    flex-direction: column;
+  }
+  .agendamento-data {
+    text-align: left;
+  }
+}
+
+/* ===========================
+   ADICIONAIS: EFEITOS & TRANSIÇÕES
+=========================== */
+
+/* logo hover */
+.logo-img {
+  transition:
+    transform 0.45s var(--ease-smooth),
+    box-shadow 0.35s var(--ease-fast);
+}
+.logo-img:hover {
+  transform: translateY(-6px) rotate(-3deg) scale(1.03);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 4px 10px rgba(201, 168, 76, 0.12);
+}
+
+/* nav underline animation */
+.nav-btn {
+  position: relative;
+  overflow: visible;
+}
+.nav-btn::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 6px;
+  height: 2px;
+  background: transparent;
+  border-radius: 2px;
+  transition:
+    background 0.25s var(--ease-fast),
+    transform 0.28s var(--ease-fast);
+  transform-origin: left center;
+}
+.nav-btn:hover::after {
+  background: var(--gold);
+  transform: scaleX(1);
+}
+.nav-btn.active::after {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* service cards subtle entrance & hover tilt */
+.servico-card {
+  transform: translateY(6px) scale(1) rotate(0deg);
+  opacity: 0;
+  animation: popIn 0.42s forwards var(--ease-smooth);
+}
+.servico-card:hover {
+  transform: translateY(-8px) rotate(-2deg) scale(1.02);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.45),
+    0 6px 18px rgba(201, 168, 76, 0.08);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* staggered animated children when grid is populated (JS will add .animated on parent) */
+.servicos-grid.animated .servico-card {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+.servicos-grid.animated .servico-card:nth-child(1) {
+  animation: popIn 0.4s 0.04s forwards;
+}
+.servicos-grid.animated .servico-card:nth-child(2) {
+  animation: popIn 0.4s 0.08s forwards;
+}
+.servicos-grid.animated .servico-card:nth-child(3) {
+  animation: popIn 0.4s 0.12s forwards;
+}
+.servicos-grid.animated .servico-card:nth-child(4) {
+  animation: popIn 0.4s 0.16s forwards;
+}
+.servicos-grid.animated .servico-card:nth-child(5) {
+  animation: popIn 0.4s 0.2s forwards;
+}
+
+/* button micro-interactions */
+.btn-agendar {
+  will-change: transform;
+}
+.btn-agendar:hover {
+  transform: translateY(-3px);
+}
+.btn-agendar:active {
+  transform: translateY(0) scale(0.99);
+}
+.btn-agendar.pressed {
+  transform: translateY(0) scale(0.985);
+  transition: transform 0.08s linear;
+}
+
+/* list item remove animation */
+.agendamento-item.removing {
+  animation: removeItem 0.28s ease forwards;
+}
+@keyframes removeItem {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    height: auto;
+    margin-bottom: 14px;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(18px) scale(0.98);
+    height: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* simple fade-up utility */
+.fade-up {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.48s var(--ease-smooth),
+    transform 0.48s var(--ease-smooth);
+}
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* accessibility: reduce motion respects */
+@media (prefers-reduced-motion: reduce) {
+  .servico-card,
+  .btn-agendar,
+  .logo-img,
+  .nav-btn::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barbearia — Agendamento</title>
+
+    <link rel="icon" type="image/x-icon" href="icone.ico" />
+    <link rel="stylesheet" href="admin-style.css" />
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="login-card">
+        <img
+          src="logo.png"
+          alt="Logo"
+          class="logo-img"
+          style="width: 84px; height: 84px; display: block; margin: 0 auto 12px"
+        />
+        <h2>🔐 Administração</h2>
+        <div class="form-group">
+          <label>Usuário</label>
+          <input
+            type="text"
+            id="login-user"
+            placeholder="admin"
+            autocomplete="username"
+          />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input
+            type="password"
+            id="login-pass"
+            placeholder="••••••"
+            autocomplete="current-password"
+          />
+        </div>
+        <button class="btn-acao" onclick="fazerLogin()">Entrar</button>
+        <p class="login-erro" id="login-erro"></p>
+      </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+      if (isAdminLoggedIn()) window.location.href = "admin.html";
+
+      document.getElementById("login-pass").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") fazerLogin();
+      });
+
+      async function fazerLogin() {
+        const username = document.getElementById("login-user").value.trim();
+        const password = document.getElementById("login-pass").value;
+        const erro = document.getElementById("login-erro");
+        erro.textContent = "";
+
+        try {
+          const data = await apiFetch("/admin/login", {
+            method: "POST",
+            body: JSON.stringify({ username, password }),
+          });
+          setAdminToken(data.token);
+          window.location.href = "admin.html";
+        } catch (e) {
+          erro.textContent = e.message || "Erro ao fazer login";
+        }
+      }
+    </script>
+  </body>
+</html>
