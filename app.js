@@ -50,20 +50,31 @@ function switchAuthTab(tab) {
 function atualizarUIAuth() {
   const logado = isClienteLoggedIn();
   const btnAuth = document.getElementById("btn-auth-nav");
+  const btnAuthMobile = document.getElementById("btn-auth-nav-mobile");
   const aviso = document.getElementById("aviso-login");
   const form = document.getElementById("form-agendamento");
   const btnSubmit = document.getElementById("btn-submit-agendar");
 
+  const onClickAuth = logado ? () => { logoutCliente(); } : () => showSection("auth");
+
+  // Botão do menu de topo (desktop) — só texto
+  btnAuth.textContent = logado ? "Sair" : "Entrar";
+  btnAuth.onclick = onClickAuth;
+
+  // Botão do menu inferior (mobile) — ícone + texto
+  if (btnAuthMobile) {
+    btnAuthMobile.innerHTML = logado
+      ? '<i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>'
+      : '<i class="fa-solid fa-user"></i><span>Entrar</span>';
+    btnAuthMobile.onclick = onClickAuth;
+  }
+
   if (logado) {
-    btnAuth.textContent = "Sair";
-    btnAuth.onclick = () => { logoutCliente(); };
     aviso.style.display = "none";
     form.style.opacity = "1";
     form.style.pointerEvents = "auto";
     btnSubmit.disabled = false;
   } else {
-    btnAuth.textContent = "Entrar";
-    btnAuth.onclick = () => showSection("auth");
     aviso.style.display = "block";
     form.style.opacity = "0.5";
     form.style.pointerEvents = "none";

@@ -73,6 +73,11 @@ header {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0; /* permite que o texto encolha/trunque em vez de empurrar a tela */
+}
+
+.logo-text {
+  min-width: 0;
 }
 
 .logo-img {
@@ -80,6 +85,7 @@ header {
   height: 70px;
   object-fit: contain;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .logo h1 {
@@ -92,6 +98,16 @@ header {
 .logo p {
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.top-nav {
+  display: flex;
+  gap: 8px;
+}
+
+/* Menu inferior estilo app — escondido por padrão, aparece só no celular */
+.bottom-nav {
+  display: none;
 }
 
 .social-links {
@@ -721,30 +737,128 @@ select.invalid {
 }
 
 /* ===========================
-   RESPONSIVO
+   RESPONSIVO / APP MOBILE
 =========================== */
-@media (max-width: 520px) {
-  .card {
-    padding: 22px 16px;
+@media (max-width: 640px) {
+  /* trava qualquer estouro horizontal residual */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
   }
+
+  /* esconde o menu de topo e usa o menu inferior fixo, como um app */
+  .top-nav {
+    display: none;
+  }
+
   .header-inner {
-    padding: 12px 16px;
+    padding: 14px 16px;
+    justify-content: flex-start;
   }
+
+  .logo {
+    width: 100%;
+  }
+
+  .logo-img {
+    width: 52px;
+    height: 52px;
+  }
+
   .logo h1 {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .logo p {
+    font-size: 0.72rem;
+  }
+
+  .social-links {
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .social-links a {
     font-size: 1.1rem;
   }
-  .nav-btn {
-    padding: 7px 12px;
-    font-size: 0.82rem;
+
+  main {
+    margin: 16px auto;
+    padding: 0 14px calc(88px + env(safe-area-inset-bottom, 0px));
   }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+
   .servicos-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .agendamento-item {
     flex-direction: column;
   }
   .agendamento-data {
     text-align: left;
+  }
+
+  .toast-sucesso {
+    top: auto;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    width: calc(100% - 32px);
+  }
+
+  /* MENU INFERIOR FIXO (bottom tab bar) */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .bottom-nav .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    padding: 8px 4px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .bottom-nav .nav-btn i {
+    font-size: 1.15rem;
+  }
+
+  .bottom-nav .nav-btn::after {
+    content: none;
+  }
+
+  .bottom-nav .nav-btn.active {
+    background: transparent;
+    color: var(--gold);
+  }
+
+  .bottom-nav .nav-btn:hover {
+    color: var(--gold);
   }
 }
 

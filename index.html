@@ -13,24 +13,43 @@
 
   <!-- CABEÇALHO -->
   <header>
-    <div class="logo">
-      <img src="logo.png" alt="Logo da Barbearia" class="logo-img">
-  
-      <div>
-          <h1>Mago dos Cortes</h1>
-          <p>Agende seu horário com facilidade</p>
-          <div class="social-links">
-            <a href="https://www.instagram.com/mago_dos_cortes_1992?igsh=MTdycm9yZWl1dDVkOQ==" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://maps.app.goo.gl/m1CCy69B2W6qie2d7" target="_blank" rel="noopener" title="Como chegar"><i class="fa-solid fa-location-dot"></i></a>
-          </div>
+    <div class="header-inner">
+      <div class="logo">
+        <img src="logo.png" alt="Logo da Barbearia" class="logo-img">
+
+        <div class="logo-text">
+            <h1>Mago dos Cortes</h1>
+            <p>Agende seu horário com facilidade</p>
+            <div class="social-links">
+              <a href="https://www.instagram.com/mago_dos_cortes_1992?igsh=MTdycm9yZWl1dDVkOQ==" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://maps.app.goo.gl/m1CCy69B2W6qie2d7" target="_blank" rel="noopener" title="Como chegar"><i class="fa-solid fa-location-dot"></i></a>
+            </div>
+        </div>
       </div>
-      <nav>
+
+      <nav class="top-nav">
         <button class="nav-btn active" onclick="showSection('agendar')">Agendar</button>
         <button class="nav-btn" onclick="showSection('agendamentos')">Meus Agendamentos</button>
         <button class="nav-btn" id="btn-auth-nav" onclick="showSection('auth')">Entrar</button>
       </nav>
     </div>
   </header>
+
+  <!-- MENU INFERIOR (estilo app) — visível apenas no celular -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showSection('agendar')">
+      <i class="fa-solid fa-calendar-plus"></i>
+      <span>Agendar</span>
+    </button>
+    <button class="nav-btn" onclick="showSection('agendamentos')">
+      <i class="fa-solid fa-list-check"></i>
+      <span>Agenda</span>
+    </button>
+    <button class="nav-btn" id="btn-auth-nav-mobile" onclick="showSection('auth')">
+      <i class="fa-solid fa-user"></i>
+      <span>Entrar</span>
+    </button>
+  </nav>
 
   <!-- TOAST DE SUCESSO -->
   <div id="toast-sucesso" class="toast-sucesso" style="display:none;">
