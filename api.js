@@ -4,7 +4,7 @@
 const API_CONFIG = {
   BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000/api'
-    : 'https://agendamento-barbearia-production-a8b4.up.railway.app/api',
+    : 'https://agendamento-barbearia-backend-production.up.railway.app/api',
 };
 
 async function apiFetch(endpoint, options = {}) {
